@@ -6,7 +6,8 @@ A starter pack for Domain-Driven Design in Go
 2. **Application Layer** is reflected by application package which contains use cases
 3. **Domain Layer** is reflected by domain package which contains the business logic for specific domain
 4. **Infrastructure Layer** is reflected by infrastructure package which contains **event** for domain events, **repository** for repository layer, and **external** for external layer
-![Layered Architecture - Eric Evans, 2003](https://github.com/angryronald/ddd-go-starter/DDD-Layered-Architecture.jpg?raw=true)
+
+![Layered Architecture - Eric Evans, 2003](https://github.com/angryronald/ddd-go-starter/blob/main/DDD-Layered-Architecture.jpg)
 
 ## Tech Stack
 - Redis
