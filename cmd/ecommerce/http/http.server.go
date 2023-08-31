@@ -35,7 +35,7 @@ func CompileRoute(
 	// adding authentication middleware here
 	// r.Use(middleware.Authenticate)
 
-	r = di.AllEndpointDependencies.CustomerEndpoint.RegisterRoute(r)
+	r = di.AllDependencies.CustomerEndpoint.RegisterRoute(r)
 
 	return r
 }

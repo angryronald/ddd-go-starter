@@ -12,6 +12,9 @@ import (
 	"github.com/angryronald/ddd-go-starter/internal/customer/domain/customer"
 	"github.com/angryronald/ddd-go-starter/internal/customer/endpoint"
 	"github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/event/publisher/kafka"
+	kafkaPublisher "github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/event/publisher/kafka"
+	"github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/event/subscriber"
+	kafkaSubscriber "github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/event/subscriber/kafka"
 	"github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/external/geolocation/http"
 	redisInternal "github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/repository/memcached/redis"
 	"github.com/angryronald/ddd-go-starter/internal/customer/infrastructure/repository/sql/postgre"
@@ -19,19 +22,21 @@ import (
 )
 
 type Dependencies struct {
-	CustomerEndpoint endpoint.CustomerEndpointInterface
+	CustomerEndpoint   endpoint.CustomerEndpointInterface
+	CustomerSubscriber subscriber.Subscriber
+	AddressSubscriber  subscriber.Subscriber
 }
 
 var syncOnce sync.Once
-var AllEndpointDependencies Dependencies
+var AllDependencies Dependencies
 
 func CollectDependencies() {
 	syncOnce.Do(func() {
-		AllEndpointDependencies = Dependencies{
+		AllDependencies = Dependencies{
 			CustomerEndpoint: endpoint.NewCustomerEndpoint(
 				command.NewCustomerCommand(
 					customer.NewCustomerService(
-						kafka.NewPublisher(
+						kafkaPublisher.NewPublisher(
 							map[string]*pubsub.Topic{},
 						),
 						postgre.NewCustomerRepository(
@@ -52,6 +57,15 @@ func CollectDependencies() {
 						),
 					),
 					http.NewGeolocationService(),
+				),
+			),
+			CustomerSubscriber: kafkaSubscriber.NewCustomerSubscriber(),
+			AddressSubscriber: kafkaSubscriber.NewAddressSubscriber(
+				nil,
+				postgre.NewAddressRepository(
+					genericPostgre.NewGenericRepository(
+						nil,
+					),
 				),
 			),
 		}
