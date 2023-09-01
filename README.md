@@ -26,5 +26,5 @@ A starter pack for Domain-Driven Design in Go
 - prometheus
 
 ## Notes
-This starter pack is not contains the testing but having unit test, integration test, and e2e test is the minimum requirement to 70% to achieve the confidence level of 88%.
+This starter pack is not contains the testing but having unit test, integration test, and e2e test to 70% is the minimum requirement to achieve the confidence level of 88%.
 dockertest (github.com/ory/dockertest) could help for the integration test.
